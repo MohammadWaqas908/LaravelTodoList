@@ -31,7 +31,7 @@ window.onload = function () {
             .datepicker("show")
             .on("changeDate", function (dateChangeEvent) {
                 $(".due-date-button").datepicker("hide");
-                $(".due-date-label").text(formatDate(dateChangeEvent.date));
+                // $(".due-date-label").text(formatDate(dateChangeEvent.date));
             });
     });
 };

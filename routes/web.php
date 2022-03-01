@@ -23,3 +23,4 @@ Route::post('todoList/update',[TodolistController::class,'update'])->name('todoL
 Route::post('todoList/delete',[TodolistController::class,'delete'])->name('todoDelete');
 Route::post('todoList/changeStatus',[TodolistController::class,'changeStatus'])->name('changeStatus');
 Route::post('todoList/filter',[TodolistController::class,'show'])->name('todolistFilter');
+Route::get('todoList/hasdue',[TodolistController::class,'checkHasDue'])->name('checkHasDue');

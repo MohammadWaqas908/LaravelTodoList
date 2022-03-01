@@ -38,6 +38,9 @@
                         <i class="fa fa-calendar my-2 px-1 text-primary btn due-date-button" data-toggle="tooltip" data-placement="bottom" title="Set a Due date"></i>
                         <i class="fa fa-calendar-times-o my-2 px-1 text-danger btn clear-due-date-button d-none" data-toggle="tooltip" data-placement="bottom" title="Clear Due date"></i>
                     </div>
+                    <div class="col-auto m-0 px-2 d-flex align-items-center">
+                        <input type="time" name="task_time" id="time" data-toggle="tooltip" data-placement="bottom" title="Set Time">
+                    </div>
                     <div class="col-auto px-0 mx-0 mr-2">
                         <button type="button" class="btn btn-primary" id="addNew">Add</button>
                     </div>
@@ -56,15 +59,6 @@
                 <option value="2">Active</option>
                 <option value="3">Has due date</option>
             </select>
-        </div>
-        <div class="col-auto d-flex align-items-center px-1 pr-3">
-            <label class="text-secondary my-2 pr-2 view-opt-label">Sort</label>
-            <select class="custom-select custom-select-sm btn my-2">
-                <option value="added-date-asc" selected>Added date</option>
-                <option value="due-date-desc">Due date</option>
-            </select>
-            <i class="fa fa fa-sort-amount-asc text-info btn mx-0 px-0 pl-1" data-toggle="tooltip" data-placement="bottom" title="Ascending"></i>
-            <i class="fa fa fa-sort-amount-desc text-info btn mx-0 px-0 pl-1 d-none" data-toggle="tooltip" data-placement="bottom" title="Descending"></i>
         </div>
     </div>
     <!-- Todo list section -->
@@ -91,7 +85,40 @@
                         <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3" id="edit-todo-input{{$item->id}}" value="{{$item->task}}" title="{{$item->task}}"/>
                     @endif
                 </div>
-                <div class="col-auto m-1 p-0 px-3 d-none">
+                <div class="col-auto m-1 p-0 px-3">
+                    <div class="row">
+                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
+                            <i class="fa fa-hourglass-2 my-2 px-2 text-warning btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Due on date"></i>
+                            <h6 class="text my-2 pr-2">{{\Carbon\Carbon::parse($item->due_date)->format('jS M Y')}}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto m-1 p-0 px-3">
+                    <div class="row">
+                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
+                            <i class="fa fa-hourglass-2 my-2 px-2 text-warning btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Due on Time"></i>
+                            <h6 class="text my-2 pr-2">{{\Carbon\Carbon::parse($item->time)->format('h:i a')}}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto m-1 p-0 px-3">
+                    <div class="row">
+                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
+                            @php
+                                $status='';
+                                if ($item->status==1) {
+                                    $status='Completed';
+                                } elseif ($item->status==2) {
+                                    $status='Active';
+                                }elseif ($item->status==3) {
+                                    $status='Has Due Date';
+                                }
+                                
+                            @endphp
+                            <i class="fa fa-hourglass-2 my-2 px-2 text-info btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Status (has due date mean task due date is passed)"></i>
+                            <h6 class="text my-2 pr-2">{{$status}}</h6>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-auto m-1 p-0 todo-actions">
                     <div class="row d-flex align-items-center justify-content-end">
@@ -113,74 +140,6 @@
                 </div>
             </div>
             @endforeach
-            {{-- <!-- Todo Item 2 -->
-            <div class="row px-3 align-items-center todo-item rounded">
-                <div class="col-auto m-1 p-0 d-flex align-items-center">
-                    <h2 class="m-0 p-0">
-                        <i class="fa fa-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
-                        <i class="fa fa-check-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
-                    </h2>
-                </div>
-                <div class="col px-1 m-1 d-flex align-items-center">
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3" readonly value="Renew car insurance" title="Renew car insurance" />
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3 d-none" value="Renew car insurance" />
-                </div>
-                <div class="col-auto m-1 p-0 px-3">
-                    <div class="row">
-                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
-                            <i class="fa fa-hourglass-2 my-2 px-2 text-warning btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Due on date"></i>
-                            <h6 class="text my-2 pr-2">28th Jun 2020</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-auto m-1 p-0 todo-actions">
-                    <div class="row d-flex align-items-center justify-content-end">
-                        <h5 class="m-0 p-0 px-2">
-                            <i class="fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
-                        </h5>
-                        <h5 class="m-0 p-0 px-2">
-                            <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
-                        </h5>
-                    </div>
-                    <div class="row todo-created-info">
-                        <div class="col-auto d-flex align-items-center pr-2">
-                            <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i>
-                            <label class="date-label my-2 text-black-50">28th Jun 2020</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Todo Item 3 -->
-            <div class="row px-3 align-items-center todo-item editing rounded">
-                <div class="col-auto m-1 p-0 d-flex align-items-center">
-                    <h2 class="m-0 p-0">
-                        <i class="fa fa-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
-                        <i class="fa fa-check-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
-                    </h2>
-                </div>
-                <div class="col px-1 m-1 d-flex align-items-center">
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3 d-none" readonly value="Sign up for online course" title="Sign up for online course" />
-                    <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3" value="Sign up for online course" />
-                </div>
-                <div class="col-auto m-1 p-0 px-3 d-none">
-                </div>
-                <div class="col-auto m-1 p-0 todo-actions">
-                    <div class="row d-flex align-items-center justify-content-end">
-                        <h5 class="m-0 p-0 px-2 edit-icon">
-                            <i class="fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
-                        </h5>
-                        <h5 class="m-0 p-0 px-2">
-                            <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
-                        </h5>
-                    </div>
-                    <div class="row todo-created-info">
-                        <div class="col-auto d-flex align-items-center pr-2">
-                            <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i>
-                            <label class="date-label my-2 text-black-50">28th Jun 2020</label>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
 </div>
@@ -197,33 +156,38 @@
     $(document).ready(function () {
         $(document).on('click','#addNew',function (e) {
             e.preventDefault();
-            var date= $(".due-date-button")
-            .datepicker("getDate");
+            // var date= $(".due-date-button").datepicker("getDate");
             var newDate=$('.due-date-button').datepicker('getFormattedDate', 'yyyy-mm-dd');
             var taskDetail=$('#newTask').val();
-            console.log(newDate);
-            if (taskDetail==''||newDate=='') {
-                if (taskDetail==''&& newDate!='') {
+            var taskTime=$('#time').val();
+            // console.log(newDate);
+            if (taskDetail==''||newDate==''||taskTime=='') {
+                if (taskDetail==''&& newDate!=''&&taskTime!='') {
                     toastr.error('Task Description is required');
-                }else if(newDate==''&&taskDetail!=''){
+                }else if(newDate==''&&taskDetail!=''&&taskTime!=''){
                     toastr.error('Task Due Date is required');
+                }else if(newDate!=''&&taskDetail!=''&&taskTime==''){
+                    toastr.error('Task Time is required');
                 }else{
-                    toastr.error('Task Description & Due Date is required');
+                    toastr.error('Task Description & Due Date and time is required');
                 }
             } else {
                 $.ajax({
                     url: "{{ route("todoList.store") }}",
                     method:'POST',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    data:{date:newDate,task:taskDetail},
+                    data:{date:newDate,task:taskDetail,time:taskTime},
                     success:function(response){
                         console.log(response);
-                        if (response!=null) {
-                            toastr.success('Task Added Successfully');
-                            loadTasks(response);
-                        }else{
-                            toastr.error('Task Not Added Successfully');
-                        }
+                        // if (response!=null) {
+                        //     toastr.success('Task Added Successfully');
+                        //     $( ".due-date-button" ).datepicker('setDate','');
+                        //     $('#time').val('');
+                        //     $('#newTask').val('');
+                        //     loadTasks(response);
+                        // }else{
+                        //     toastr.error('Task Not Added Successfully');
+                        // }
                     }
                 });
             }
@@ -319,6 +283,18 @@
                 }
             });
         });
+
+        setInterval(()=>{
+            $.ajax({
+                url:"{{route('checkHasDue')}}",
+                type:'get',
+                success:function(response)
+                {
+                    // console.log(response);
+                    loadTasks(response);     
+                }
+            });
+        },300000);
     });
 
 function loadTasks(Lists) {
@@ -345,7 +321,14 @@ function loadTasks(Lists) {
             if (value.status!=3) {
                 editBtn=`<h5 class="m-0 p-0 px-2"><i class="fa fa-pencil text-info btn m-0 p-0 editBtn" data-toggle="tooltip" data-edittodo="`+value.id+`" data-placement="bottom" title="Edit todo"></i></h5>`;
             }
-
+            var status='';
+            if (value.status==1) {
+                status='Completed';
+            }else if(value.status==2) {
+                status='Active';
+            }else if(value.status==3) {
+                status='Has Due Date';
+            }
             var row=`<div class="row px-3 align-items-center todo-item rounded">
                 <div class="col-auto m-1 p-0 d-flex align-items-center">
                     <h2 class="m-0 p-0">`+statusCheckBox+`
@@ -353,7 +336,30 @@ function loadTasks(Lists) {
                 </div>
                 <div class="col px-1 m-1 d-flex align-items-center">`+taskInput+`
                 </div>
-                <div class="col-auto m-1 p-0 px-3 d-none">
+                <div class="col-auto m-1 p-0 px-3">
+                    <div class="row">
+                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
+                            <i class="fa fa-hourglass-2 my-2 px-2 text-warning btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Due on date"></i>
+                            <h6 class="text my-2 pr-2">{{\Carbon\Carbon::parse(`+value.due_date+`)->format('jS M Y')}}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto m-1 p-0 px-3">
+                    <div class="row">
+                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
+                            <i class="fa fa-hourglass-2 my-2 px-2 text-warning btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Due on Time"></i>
+                            <h6 class="text my-2 pr-2">{{\Carbon\Carbon::parse(`+value.time+`)->format('h:i a')}}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto m-1 p-0 px-3">
+                    <div class="row">
+                        <div class="col-auto d-flex align-items-center rounded bg-white border border-warning">
+                            
+                            <i class="fa fa-hourglass-2 my-2 px-2 text-info btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Status (has due date mean task due date is passed)"></i>
+                            <h6 class="text my-2 pr-2">`+status+`</h6>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-auto m-1 p-0 todo-actions">
                     <div class="row d-flex align-items-center justify-content-end">
