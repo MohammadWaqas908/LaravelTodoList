@@ -16,13 +16,14 @@ class TodolistController extends Controller
      */
     public function index(Request $request)
     {
-        $ip = '134.0.218.66';
-        // $ip = $request->ip();
+        // $ip = '134.0.218.66';
+        $ip = $request->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
-        
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));   
+        }
         $todolists=Todolist::orderBy('id','desc')->get();
         return view('todolist',compact('todolists'));
     }
@@ -45,19 +46,14 @@ class TodolistController extends Controller
      */
     public function store(Request $request)
     {
-        // return Config::get('app.timezone');
-        
-        
-        // return $request->ip();
-         $ip = '134.0.218.66';
-         //$ip = $request->ip();
+        // $ip = '134.0.218.66';
+        $ip = $request->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
-        
-        // return $timezone;
-        // echo date('Y/m/d H:i:s');
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        }
         $tdolist=new Todolist();
         $tdolist->task=$request->task;
         $tdolist->due_date=$request->date;
@@ -79,8 +75,10 @@ class TodolistController extends Controller
         $ip = $request->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        }
         
         // For Filter
         $status=$request->status;
@@ -116,8 +114,10 @@ class TodolistController extends Controller
         $ip = $request->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        }
         
         // return $request->all();
         $tdolist=Todolist::find($request->id);
@@ -139,8 +139,10 @@ class TodolistController extends Controller
         $ip = $req->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        }
         
         $tdolist=Todolist::find($req->id);
         $tdolist->delete();
@@ -153,8 +155,10 @@ class TodolistController extends Controller
         $ip = $req->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        }
         
         $status='';
         $tdolist=Todolist::find($req->id);
@@ -175,8 +179,10 @@ class TodolistController extends Controller
         $ip = $request->ip();
         $ipInfo = file_get_contents('http://ip-api.com/json/' . $ip);
         $ipInfo = json_decode($ipInfo);
-        $timezone = $ipInfo->timezone;
-        $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        if ($ipInfo->status=='success') {
+            $timezone = $ipInfo->timezone;
+            $time =Config::set('app.timezone',$timezone ?? config('app.timezone'));
+        }
         
         $currentDate=Carbon::now()->format('Y-m-d');
         // return $currentDate;
